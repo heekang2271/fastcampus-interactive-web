@@ -13,18 +13,16 @@ class App extends Canvas {
 
   init() {
     this.resize();
-    this.createTails();
   }
 
   createTails() {
-    const x = randomNumBetween(300, 500);
-    this.tails.push(new Tail(x));
+    const x = randomNumBetween(this.canvasWidth * 0.2, this.canvasWidth * 0.8);
+    const vy = this.canvasHeight * randomNumBetween(0.01, 0.015) * -1;
+    this.tails.push(new Tail(x, vy));
   }
 
-  createParticles() {
+  createParticles(x, y) {
     const PARTICLE_NUM = 400;
-    const x = this.canvasWidth / 2;
-    const y = this.canvasHeight / 2;
     for (let i = 0; i < PARTICLE_NUM; i++) {
       const r = randomNumBetween(2, 100) * hypotenuse(this.canvasWidth, this.canvasHeight) * 0.0001;
       const angle = (Math.PI / 180) * randomNumBetween(0, 360);
@@ -42,19 +40,28 @@ class App extends Canvas {
       this.ctx.fillStyle = '#000000' + 40;
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
-      this.tails.forEach((tail) => {
+      if (Math.random() < 0.03) {
+        this.createTails();
+      }
+
+      this.tails.forEach((tail, i) => {
         tail.update();
         tail.draw();
+
+        if (tail.vy > -0.7) {
+          this.tails.splice(i, 1);
+          this.createParticles(tail.x, tail.y);
+        }
       });
 
-      // this.particles.forEach((particle, i) => {
-      //   particle.draw();
-      //   particle.update();
+      this.particles.forEach((particle, i) => {
+        particle.draw();
+        particle.update();
 
-      //   if (particle.opacity < 0) {
-      //     this.particles.splice(i, 1);
-      //   }
-      // });
+        if (particle.opacity < 0) {
+          this.particles.splice(i, 1);
+        }
+      });
     };
 
     this.animate(draw);
