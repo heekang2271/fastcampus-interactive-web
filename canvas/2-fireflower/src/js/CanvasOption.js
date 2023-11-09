@@ -9,5 +9,7 @@ export default class CanvasOption {
 
     this.fps = 60;
     this.interval = 1000 / this.fps;
+
+    this.bgColor = '#000000';
   }
 }

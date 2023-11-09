@@ -20,10 +20,11 @@ class App extends Canvas {
   createTails() {
     const x = randomNumBetween(this.canvasWidth * 0.2, this.canvasWidth * 0.8);
     const vy = this.canvasHeight * randomNumBetween(0.01, 0.015) * -1;
-    this.tails.push(new Tail(x, vy));
+    const colorDeg = randomNumBetween(0, 360);
+    this.tails.push(new Tail(x, vy, colorDeg));
   }
 
-  createParticles(x, y) {
+  createParticles(x, y, colorDeg) {
     const PARTICLE_NUM = 400;
     for (let i = 0; i < PARTICLE_NUM; i++) {
       const r = randomNumBetween(2, 100) * hypotenuse(this.canvasWidth, this.canvasHeight) * 0.0001;
@@ -33,13 +34,17 @@ class App extends Canvas {
       const vy = r * Math.sin(angle);
 
       const opacity = randomNumBetween(0.6, 0.9);
-      this.particles.push(new Particle(x, y, vx, vy, opacity));
+      const _colorDeg = randomNumBetween(-20, 20) + colorDeg;
+      this.particles.push(new Particle(x, y, vx, vy, opacity, _colorDeg));
     }
   }
 
   render() {
     const draw = () => {
-      this.ctx.fillStyle = '#000000' + 40;
+      this.ctx.fillStyle = this.bgColor + 40;
+      this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
+
+      this.ctx.fillStyle = `rgba(255, 255, 255, ${this.particles.length / 50000})`;
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
 
       if (Math.random() < 0.03) {
@@ -54,12 +59,12 @@ class App extends Canvas {
           const vx = randomNumBetween(-5, 5) * 0.05;
           const vy = randomNumBetween(-5, 5) * 0.05;
           const opacity = Math.min(-tail.vy, 0.3);
-          this.sparks.push(new Spark(tail.x, tail.y, vx, vy, opacity));
+          this.sparks.push(new Spark(tail.x, tail.y, vx, vy, opacity, tail.colorDeg));
         }
 
         if (tail.vy > -0.7) {
           this.tails.splice(i, 1);
-          this.createParticles(tail.x, tail.y);
+          this.createParticles(tail.x, tail.y, tail.colorDeg);
         }
       });
 
@@ -68,7 +73,7 @@ class App extends Canvas {
         particle.draw();
 
         if (Math.random() < 0.1) {
-          this.sparks.push(new Spark(particle.x, particle.y, 0, 0, 0.3));
+          this.sparks.push(new Spark(particle.x, particle.y, 0, 0, 0.3, 45));
         }
 
         if (particle.opacity < 0) {

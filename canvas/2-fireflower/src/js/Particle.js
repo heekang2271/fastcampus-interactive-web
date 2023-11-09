@@ -1,7 +1,7 @@
 import CanvasOption from './CanvasOption.js';
 
 export default class Particle extends CanvasOption {
-  constructor(x, y, vx, vy, opacity) {
+  constructor(x, y, vx, vy, opacity, colorDeg) {
     super();
 
     this.x = x;
@@ -12,6 +12,7 @@ export default class Particle extends CanvasOption {
 
     this.friction = 0.93;
     this.gravity = 0.12;
+    this.colorDeg = colorDeg;
   }
 
   update() {
@@ -28,7 +29,7 @@ export default class Particle extends CanvasOption {
 
   draw() {
     this.ctx.beginPath();
-    this.ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+    this.ctx.fillStyle = `hsla(${this.colorDeg}, 100%, 65%, ${this.opacity})`;
     this.ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
     this.ctx.fill();
     this.ctx.closePath();
