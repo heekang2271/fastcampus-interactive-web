@@ -1,7 +1,7 @@
 import CanvasOption from './CanvasOption.js';
 
 export default class Spark extends CanvasOption {
-  constructor(x, y, opacity) {
+  constructor(x, y, vx, vy, opacity) {
     super();
 
     this.x = x;
