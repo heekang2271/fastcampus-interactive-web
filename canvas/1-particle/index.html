@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./src/css/style.css" rel="stylesheet" />
+    <title>파티클 기초</title>
+  </head>
+  <body>
+    <canvas></canvas>
+    <svg>
+      <defs>
+        <filter id="gooey">
+          <feGaussianBlur stdDeviation="40" in="SourceGraphic" result="blur1" />
+          <feColorMatrix in="blur1" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -23" />
+        </filter>
+      </defs>
+    </svg>
+    <script type="module" src="./src/js/App.js"></script>
+  </body>
+</html>
